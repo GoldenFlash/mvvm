@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" name="name">
+    <div class="output"></div>
+    <script type="text/javascript">
+    var input = document.querySelector('input');
+    var output = document.querySelector('.output');
+    var obj = {
+        data: {
+            name: "a"
+        }
+    };
+
+    Object.defineProperty(obj, "name", {
+        get: function() {
+            console.log(1)
+            return obj.data.name;
+        },
+        set: function(opts) {
+            console.log(2)
+            obj.data.name = opts;
+            input.value = opts;
+            output.innerText = opts;
+        }
+    });
+    var init = function() {
+        var value = obj.name;
+        input.value = value;
+        output.innerText = value;
+    };
+    init();
+    input.addEventListener('input', function(e) {
+        var value = e.target.value;
+        obj.name = value;
+    })
+    </script>
+</body>
+
+</html>

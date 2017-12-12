@@ -7,39 +7,64 @@
 </head>
 
 <body>
-    <input type="text" name="name">
-    <div class="output"></div>
-    <script type="text/javascript">
-    var input = document.querySelector('input');
-    var output = document.querySelector('.output');
-    var obj = {
-        data: {
-            name: "a"
-        }
-    };
+    <div class="box">
+        <input type="text" name="name">
+        <div class="output"></div>
+    </div>
 
-    Object.defineProperty(obj, "name", {
-        get: function() {
-            console.log(1)
-            return obj.data.name;
-        },
-        set: function(opts) {
-            console.log(2)
-            obj.data.name = opts;
-            input.value = opts;
-            output.innerText = opts;
+    <script type="text/javascript">
+ 
+        var obj = {
+            el:".box",
+            data: {
+               _data:{
+                 name: "a"
+               }
+            }
+        };
+     var Vue = function(options){
+        that =this;
+        this.options = options;
+        this.el = options.el;
+       
+        this.data = this.options.data;
+        this.element = document.querySelector(this.el)
+
+        this.input = this.element.querySelector('input');
+        this.output = this.element.querySelector('.output');
+
+        this.deProperty( this.data);
+        this.init(this.data);
+        this.bind();
+     }
+      Vue.prototype.deProperty = function(obj) {
+            for (var key in obj._data) {
+                Object.defineProperty(obj, key, {
+                    get: function() {
+                        console.log(1)
+                        return obj._data[key];
+                    },
+                    set: function(opts) {
+                        console.log(2)
+                        obj._data[key] = opts;
+                        that.input.value = opts;
+                        that.output.innerText = opts;
+                    }
+                });
+            }
         }
-    });
-    var init = function() {
-        var value = obj.name;
-        input.value = value;
-        output.innerText = value;
-    };
-    init();
-    input.addEventListener('input', function(e) {
-        var value = e.target.value;
-        obj.name = value;
-    })
+        Vue.prototype.init = function(obj) {
+            var value = obj.name;
+            that.input.value = value;
+            that.output.innerText = value;
+        };
+        Vue.prototype.bind = function(){
+            that.input.addEventListener('input', function(e) {
+                var value = e.target.value;
+                that.data.name = value;
+            })
+        }
+        new Vue(obj)
     </script>
 </body>
 
